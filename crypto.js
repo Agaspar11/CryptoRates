@@ -6,6 +6,7 @@ const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&o
 const listElement = document.getElementById('cryptocurrency-list');
 const loadingIndicator = document.getElementById('loading-indicator');
 const endNotification = document.getElementById('end-notification');
+const searchInput = document.getElementById('search-input');
 
 const fetchCryptocurrencyData = async () => {
   loading = true;
@@ -15,7 +16,7 @@ const fetchCryptocurrencyData = async () => {
     const response = await fetch(apiUrl);
     const data = await response.json();
 
-    if (data.length === 0) {
+    if (data.length === 0 && searchInput.value.trim() === '') {
       endOfRecords = true;
       endNotification.innerText = 'No more records to show.';
     } else {
@@ -29,9 +30,9 @@ const fetchCryptocurrencyData = async () => {
         cryptoElement.innerHTML = `
           <img src="${iconUrl}">
           <div class="details">
-            <div class="name"><span class="label">Name:</span> ${name}</div>
-            <div class="symbol"><span class="label">Symbol:</span> ${symbol}</div>
-            <div class="price"><span class="label">Price:</span> ${price}</div>
+            <div class="name"><span class="label">Rate:</span> ${name}</div>
+            <div class="symbol"><span class="label">Crypto name:</span> ${symbol}</div>
+            <div class="price"><span class="label">Crypto unit:</span> ${price}</div>
           </div>`;
         listElement.appendChild(cryptoElement);
       });
@@ -58,7 +59,6 @@ window.addEventListener('scroll', lazyLoad);
 
 fetchCryptocurrencyData();
 
-const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', handleSearch);
 
 function handleSearch() {
@@ -66,7 +66,9 @@ function handleSearch() {
 
   if (searchQuery === '') {
     clearCryptocurrencies();
+    endOfRecords = false;
     fetchCryptocurrencyData();
+    endNotification.innerText = ''; 
   } else {
     filterCryptocurrencies(searchQuery);
   }
