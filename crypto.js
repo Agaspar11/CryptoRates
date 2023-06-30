@@ -1,41 +1,40 @@
-let page = 1;
+const page = 1;
+const pageSize = 20;
 let loading = false;
 let endOfRecords = false;
-const apiUrl = 'https://api.coingecko.com/api/v3/exchange_rates';
+const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${pageSize}&page=${page}`;
 const listElement = document.getElementById('cryptocurrency-list');
 const loadingIndicator = document.getElementById('loading-indicator');
 const endNotification = document.getElementById('end-notification');
 
-const fetchCryptocurrencyRates = async (page) => {
+const fetchCryptocurrencyData = async () => {
   loading = true;
   loadingIndicator.innerText = 'Loading...';
 
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    const rates = data.rates;
-    const cryptocurrencies = Object.keys(rates);
 
-    if (cryptocurrencies.length === 0) {
+    if (data.length === 0) {
       endOfRecords = true;
       endNotification.innerText = 'No more records to show.';
     } else {
-      cryptocurrencies.forEach((crypto) => {
-        const rate = rates[crypto].value;
-        const unit = rates[crypto].unit;
+      data.forEach((crypto) => {
+        const name = crypto.name;
+        const symbol = crypto.symbol;
+        const price = crypto.current_price;
+        const iconUrl = crypto.image;
         const cryptoElement = document.createElement('div');
         cryptoElement.classList.add('cryptocurrency');
         cryptoElement.innerHTML = `
-          <img src="${rates[crypto].icon}">
+          <img src="${iconUrl}">
           <div class="details">
-            <div class="rate"><span class="label">Rate:</span> ${rate}</div>
-            <div class="name"><span class="label">Crypto name:</span> ${rates[crypto].name}</div>
-            <div class="unit"><span class="label">Crypto unit:</span> ${unit}</div>
+            <div class="name"><span class="label">Name:</span> ${name}</div>
+            <div class="symbol"><span class="label">Symbol:</span> ${symbol}</div>
+            <div class="price"><span class="label">Price:</span> ${price}</div>
           </div>`;
         listElement.appendChild(cryptoElement);
       });
-
-      page++;
     }
 
     loading = false;
@@ -50,14 +49,14 @@ const fetchCryptocurrencyRates = async (page) => {
 const lazyLoad = () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
     if (!loading && !endOfRecords) {
-      fetchCryptocurrencyRates(page);
+      fetchCryptocurrencyData();
     }
   }
 };
 
 window.addEventListener('scroll', lazyLoad);
 
-fetchCryptocurrencyRates(page);
+fetchCryptocurrencyData();
 
 const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', handleSearch);
@@ -67,7 +66,7 @@ function handleSearch() {
 
   if (searchQuery === '') {
     clearCryptocurrencies();
-    fetchCryptocurrencyRates(page);
+    fetchCryptocurrencyData();
   } else {
     filterCryptocurrencies(searchQuery);
   }
@@ -79,27 +78,31 @@ function filterCryptocurrencies(query) {
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
-      const rates = data.rates;
-      const cryptocurrencies = Object.keys(rates);
+      const filteredData = data.filter((crypto) =>
+        crypto.name.toLowerCase().includes(query)
+      );
 
-      cryptocurrencies.forEach((crypto) => {
-        const cryptoName = rates[crypto].name.toLowerCase();
-
-        if (cryptoName.includes(query)) {
-          const rate = rates[crypto].value;
-          const unit = rates[crypto].unit;
+      if (filteredData.length === 0) {
+        endOfRecords = true;
+        endNotification.innerText = 'No matching records found.';
+      } else {
+        filteredData.forEach((crypto) => {
+          const name = crypto.name;
+          const symbol = crypto.symbol;
+          const price = crypto.current_price;
+          const iconUrl = crypto.image;
           const cryptoElement = document.createElement('div');
           cryptoElement.classList.add('cryptocurrency');
           cryptoElement.innerHTML = `
-            <img src="${rates[crypto].icon}">
+            <img src="${iconUrl}">
             <div class="details">
-              <div class="rate"><span class="label">Rate:</span> ${rate}</div>
-              <div class="name"><span class="label">Crypto name:</span> ${rates[crypto].name}</div>
-              <div class="unit"><span class="label">Crypto unit:</span> ${unit}</div>
+              <div class="name"><span class="label">Name:</span> ${name}</div>
+              <div class="symbol"><span class="label">Symbol:</span> ${symbol}</div>
+              <div class="price"><span class="label">Price:</span> ${price}</div>
             </div>`;
           listElement.appendChild(cryptoElement);
-        }
-      });
+        });
+      }
     })
     .catch((error) => {
       console.log('Error:', error);
