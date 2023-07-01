@@ -8,6 +8,7 @@ const loadingIndicator = document.getElementById('loading-indicator');
 const endNotification = document.getElementById('end-notification');
 const searchInput = document.getElementById('search-input');
 
+// Fetch cryptocurrency data from the API
 const fetchCryptocurrencyData = async () => {
   loading = true;
   loadingIndicator.innerText = 'Loading...';
@@ -47,6 +48,7 @@ const fetchCryptocurrencyData = async () => {
   }
 };
 
+// Lazy load more data when scrolling
 const lazyLoad = () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
     if (!loading && !endOfRecords) {
@@ -59,8 +61,10 @@ window.addEventListener('scroll', lazyLoad);
 
 fetchCryptocurrencyData();
 
+// Handle search input
 searchInput.addEventListener('input', handleSearch);
 
+// Handle search query and filter cryptocurrencies
 function handleSearch() {
   const searchQuery = searchInput.value.trim().toLowerCase();
 
@@ -68,12 +72,13 @@ function handleSearch() {
     clearCryptocurrencies();
     endOfRecords = false;
     fetchCryptocurrencyData();
-    endNotification.innerText = ''; 
+    endNotification.innerText = '';
   } else {
     filterCryptocurrencies(searchQuery);
   }
 }
 
+// Filter cryptocurrencies based on the search query
 function filterCryptocurrencies(query) {
   clearCryptocurrencies();
 
@@ -87,6 +92,7 @@ function filterCryptocurrencies(query) {
       if (filteredData.length === 0) {
         endOfRecords = true;
         endNotification.innerText = 'No matching records found.';
+        endNotification.style.display = 'block'; // Show the message
       } else {
         filteredData.forEach((crypto) => {
           const name = crypto.name;
@@ -111,8 +117,10 @@ function filterCryptocurrencies(query) {
     });
 }
 
+// Clear the displayed cryptocurrencies
 function clearCryptocurrencies() {
   while (listElement.firstChild) {
     listElement.removeChild(listElement.firstChild);
   }
+  endNotification.style.display = 'none'; // Hide the message
 }
