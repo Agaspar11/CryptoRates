@@ -30,9 +30,9 @@ const fetchCryptocurrencyData = async () => {
         cryptoElement.innerHTML = `
           <img src="${iconUrl}">
           <div class="details">
-            <div class="name"><span class="label">Rate:</span> ${name}</div>
-            <div class="symbol"><span class="label">Crypto name:</span> ${symbol}</div>
-            <div class="price"><span class="label">Crypto unit:</span> ${price}</div>
+            <div class="name"><span class="label">Rate:</span> ${price}</div>
+            <div class="symbol"><span class="label">Crypto name:</span> ${name}</div>
+            <div class="price"><span class="label">Crypto unit:</span> ${symbol}</div>
           </div>`;
         listElement.appendChild(cryptoElement);
       });
@@ -98,9 +98,9 @@ function filterCryptocurrencies(query) {
           cryptoElement.innerHTML = `
           <img src="${iconUrl}">
           <div class="details">
-            <div class="name"><span class="label">Rate:</span> ${name}</div>
-            <div class="symbol"><span class="label">Crypto name:</span> ${symbol}</div>
-            <div class="price"><span class="label">Crypto unit:</span> ${price}</div>
+            <div class="name"><span class="label">Rate:</span> ${price}</div>
+            <div class="symbol"><span class="label">Crypto name:</span> ${name}</div>
+            <div class="price"><span class="label">Crypto unit:</span> ${symbol}</div>
           </div>`;
           listElement.appendChild(cryptoElement);
         });

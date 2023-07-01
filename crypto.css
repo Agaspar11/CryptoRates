@@ -31,12 +31,12 @@ body {
   
   .cryptocurrency {
     border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     display: flex;
     align-items: center;
     width: 100%;
-  }
-  
+    }
+
   .cryptocurrency img {
     width: 100px;
     height: 100px;
