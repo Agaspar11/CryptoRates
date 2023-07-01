@@ -96,12 +96,12 @@ function filterCryptocurrencies(query) {
           const cryptoElement = document.createElement('div');
           cryptoElement.classList.add('cryptocurrency');
           cryptoElement.innerHTML = `
-            <img src="${iconUrl}">
-            <div class="details">
-              <div class="name"><span class="label">Name:</span> ${name}</div>
-              <div class="symbol"><span class="label">Symbol:</span> ${symbol}</div>
-              <div class="price"><span class="label">Price:</span> ${price}</div>
-            </div>`;
+          <img src="${iconUrl}">
+          <div class="details">
+            <div class="name"><span class="label">Rate:</span> ${name}</div>
+            <div class="symbol"><span class="label">Crypto name:</span> ${symbol}</div>
+            <div class="price"><span class="label">Crypto unit:</span> ${price}</div>
+          </div>`;
           listElement.appendChild(cryptoElement);
         });
       }
