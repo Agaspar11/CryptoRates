@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Oswald', sans-serif;
     margin: 0;
     background-color: 	#f5ffdf;
     padding-top: 2rem;
@@ -8,7 +8,6 @@ body {
   h1 {
     text-align: center;
     color: rgb(71, 71, 71);
-    font-family: 'Oswald', sans-serif;
   }
   
   .loading {
@@ -135,10 +134,4 @@ body {
   .list {
     display: flex;
     justify-content: center;
-  }
-
-  /* Website Responsiveness*/
-
-  @media screen and (max-width: 1165px) {
-    
   }
